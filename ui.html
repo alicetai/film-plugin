@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Film Camera</title>
+  <style>
+    :root {
+      --brand-primary: #6457f9;
+      --brand-secondary: #3730a3;
+      --text-primary: #1d2939;
+      --text-secondary: #667085;
+      --text-tertiary: #98a2b3;
+      --surface: #ffffff;
+      --surface-subtle: #f2f4f7;
+      --border: #e5e7eb;
+      --purple-tint: #f4f3ff;
+      --purple-border: #dddaff;
+      --success-bg: #ecfdf3;
+      --success: #027a48;
+      --error-bg: #fef3f2;
+      --error: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-primary); background: var(--surface); font-size: 13px; line-height: 1.45;
+    }
+    main { padding: 24px 20px 20px; }
+    .identity { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+    .mark {
+      width: 40px; height: 40px; flex: 0 0 auto; display: grid; place-items: center;
+      color: white; border-radius: 8px; background: var(--brand-primary);
+      box-shadow: 0 4px 10px rgba(100, 87, 249, .18);
+    }
+    h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.15px; }
+    .eyebrow { margin: 2px 0 0; color: var(--text-secondary); font-size: 12px; }
+    .intro { color: var(--text-secondary); margin: 0 0 18px; font-size: 13px; line-height: 1.55; }
+    .preset {
+      border: 1px solid var(--purple-border); border-radius: 8px; background: var(--purple-tint);
+      padding: 12px; display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px;
+    }
+    .swatch { width: 28px; height: 28px; border-radius: 6px; flex: 0 0 auto; overflow: hidden; position: relative;
+      background: linear-gradient(135deg, #f6dd8d 0%, #c57632 46%, #4f663d 47%, #14241e 100%); }
+    .swatch:after { content: ""; position:absolute; inset:0; opacity:.28; background-image: radial-gradient(#fff 0.7px, transparent .8px); background-size:4px 4px; }
+    .preset strong { display: block; color: var(--brand-secondary); font-size: 13px; font-weight: 600; }
+    .preset p { margin: 2px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.45; }
+    .selection {
+      min-height: 57px; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px; transition: border-color .15s, background .15s;
+    }
+    .selection.ready { border-color: var(--purple-border); background: #fbfaff; }
+    .selection-icon { width: 18px; height: 18px; color: var(--text-tertiary); flex: 0 0 auto; }
+    .selection.ready .selection-icon { color: var(--brand-primary); }
+    .selection-copy { min-width: 0; }
+    .selection-title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); font-size: 12px; font-weight: 600; }
+    .selection-detail { display: block; color: var(--text-secondary); font-size: 11px; margin-top: 1px; }
+    .notice { display: none; border-radius: 8px; padding: 10px; margin: -4px 0 12px; font-size: 12px; line-height: 1.45; }
+    .notice.show { display: flex; gap: 7px; align-items: flex-start; }
+    .notice.error { background: var(--error-bg); border: 1px solid #fecdca; color: var(--error); }
+    .notice.success { background: var(--success-bg); border: 1px solid #a6f4c5; color: var(--success); }
+    button {
+      width: 100%; min-height: 44px; border: 0; border-radius: 8px; cursor: pointer;
+      background: var(--brand-primary); color: #fff; font: 600 13px inherit;
+      display: flex; gap: 8px; align-items: center; justify-content: center;
+      transition: background .15s, transform .1s, opacity .15s;
+    }
+    button:hover:not(:disabled) { background: var(--brand-secondary); }
+    button:active:not(:disabled) { transform: translateY(1px); }
+    button:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    .loader { display: none; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .75s linear infinite; }
+    button.loading .loader { display: block; }
+    button.loading .button-label { animation: shimmer 1.6s linear infinite; }
+    .footnote { margin: 12px 0 0; text-align: center; color: var(--text-tertiary); font-size: 11px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shimmer { 50% { opacity: .65; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="identity">
+      <div class="mark" aria-hidden="true">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l1.4-2h7.2L17 7h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="3.4"/></svg>
+      </div>
+      <div><h1>Film Camera</h1><p class="eyebrow">A single, beautifully imperfect film recipe.</p></div>
+    </header>
+    <p class="intro">Turn a selected image into a warm, textured analogue photograph without leaving Figma.</p>
+    <section class="preset" aria-label="Selected film preset">
+      <div class="swatch" aria-hidden="true"></div>
+      <div><strong>Gold 800-inspired</strong><p>Golden highlights, soft contrast, muted greens and fine 35mm grain.</p></div>
+    </section>
+    <section id="selection" class="selection" aria-live="polite">
+      <svg class="selection-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.2"/><path d="m21 15-4.5-4.5L7 20"/></svg>
+      <div class="selection-copy"><span id="selection-title" class="selection-title">No image selected</span><span id="selection-detail" class="selection-detail">Select an image layer on the canvas to get started.</span></div>
+    </section>
+    <div id="notice" class="notice" role="status"></div>
+    <button id="apply" disabled type="button"><span class="loader" aria-hidden="true"></span><span class="button-label">Apply film effect</span></button>
+    <p class="footnote">Works with image fills only. Your original remains available in Figma’s undo history.</p>
+  </main>
+  <script>
+    var applyButton = document.getElementById('apply');
+    var selectionEl = document.getElementById('selection');
+    var titleEl = document.getElementById('selection-title');
+    var detailEl = document.getElementById('selection-detail');
+    var noticeEl = document.getElementById('notice');
+    var hasImage = false;
+    var processingTargetId = null;
+
+    function setNotice(message, type) {
+      noticeEl.textContent = message || '';
+      noticeEl.className = message ? 'notice show ' + type : 'notice';
+    }
+    function setLoading(loading, label) {
+      applyButton.disabled = loading || !hasImage;
+      applyButton.classList.toggle('loading', loading);
+      applyButton.querySelector('.button-label').textContent = label || 'Apply film effect';
+    }
+    function clamp(value) { return Math.max(0, Math.min(255, value)); }
+    function smoothstep(edge0, edge1, x) { var t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0))); return t * t * (3 - 2 * t); }
+    function seededNoise(x, y) { var value = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return value - Math.floor(value); }
+
+    async function processFilm(bytes) {
+      var blob = new Blob([bytes]);
+      var bitmap = await createImageBitmap(blob);
+      var maxSide = 4096;
+      var scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+      var width = Math.max(1, Math.round(bitmap.width * scale));
+      var height = Math.max(1, Math.round(bitmap.height * scale));
+      var canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      var context = canvas.getContext('2d', { willReadFrequently: true });
+      context.drawImage(bitmap, 0, 0, width, height);
+      if (bitmap.close) bitmap.close();
+      var imageData = context.getImageData(0, 0, width, height);
+      var data = imageData.data;
+      var centreX = width / 2, centreY = height / 2;
+      var maxDistance = Math.sqrt(centreX * centreX + centreY * centreY);
+
+      for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+          var index = (y * width + x) * 4;
+          var r = data[index], g = data[index + 1], b = data[index + 2];
+          var luminance = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255;
+          var shadow = 1 - smoothstep(0.12, 0.54, luminance);
+          var highlight = smoothstep(0.54, 0.96, luminance);
+
+          // Gold film: gently lift blacks and roll highlights into a warm, lower-contrast curve.
+          r = 16 + r * 0.91 + 10 * highlight - 3 * shadow;
+          g = 13 + g * 0.88 + 7 * highlight + 3 * shadow;
+          b = 10 + b * 0.82 - 7 * highlight + 10 * shadow;
+
+          // The characteristic warm red/yellow response with quieter cyan and green.
+          var warmth = Math.max(0, r - b) / 255;
+          r += 8 * warmth + 3 * highlight;
+          g += 2 * warmth - 4 * Math.max(0, g - r) / 255;
+          b -= 3 * warmth;
+
+          // Fine, evenly distributed 800-speed grain; stronger where film normally shows it.
+          var grainStrength = 3.8 + shadow * 5.2 + highlight * 1.4;
+          var grain = (seededNoise(x, y) - .5) * grainStrength;
+          var chromaGrain = (seededNoise(x + 97, y + 53) - .5) * 1.25;
+          var distance = Math.sqrt((x - centreX) * (x - centreX) + (y - centreY) * (y - centreY)) / maxDistance;
+          var vignette = Math.max(0, distance - .48) * 7;
+          data[index] = clamp(r + grain - vignette);
+          data[index + 1] = clamp(g + grain + chromaGrain - vignette);
+          data[index + 2] = clamp(b + grain - chromaGrain - vignette * .65);
+        }
+      }
+      context.putImageData(imageData, 0, 0);
+      var output = await new Promise(function(resolve) { canvas.toBlob(resolve, 'image/png'); });
+      if (!output) throw new Error('The film effect could not be rendered.');
+      return new Uint8Array(await output.arrayBuffer());
+    }
+
+    applyButton.addEventListener('click', function() {
+      if (!hasImage) return;
+      setNotice('', ''); setLoading(true, 'Preparing image…');
+      parent.postMessage({ pluginMessage: { type: 'request-image' } }, '*');
+    });
+
+    window.onmessage = async function(event) {
+      var message = event.data.pluginMessage;
+      if (!message) return;
+      if (message.type === 'selection') {
+        hasImage = message.selection.valid;
+        titleEl.textContent = message.selection.title;
+        detailEl.textContent = message.selection.detail;
+        selectionEl.classList.toggle('ready', hasImage);
+        setNotice('', ''); setLoading(false);
+      }
+      if (message.type === 'source-image') {
+        try {
+          processingTargetId = message.targetId;
+          setLoading(true, 'Developing film…');
+          var output = await processFilm(message.bytes);
+          setLoading(true, 'Applying effect…');
+          parent.postMessage({ pluginMessage: { type: 'apply-image', bytes: output, targetId: processingTargetId } }, '*');
+        } catch (error) {
+          setLoading(false); setNotice(error.message || 'Could not process this image.', 'error');
+        }
+      }
+      if (message.type === 'complete') {
+        processingTargetId = null;
+        setLoading(false); setNotice(message.message, 'success');
+      }
+      if (message.type === 'error') {
+        processingTargetId = null;
+        setLoading(false); setNotice(message.message, 'error');
+      }
+    };
+  </script>
+</body>
+</html>
