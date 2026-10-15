@@ -41,7 +41,7 @@ function describeSelection() {
   return {
     valid: true,
     title: node.name || 'Selected image',
-    detail: 'Ready for the Gold 800-inspired treatment.'
+    detail: 'Ready for the film-reference treatment.'
   };
 }
 
@@ -64,7 +64,12 @@ figma.ui.onmessage = async function (message) {
       const image = figma.getImageByHash(selectedImage.imagePaint.paint.imageHash);
       if (!image) throw new Error('The selected image could not be read.');
       const bytes = await image.getBytesAsync();
-      figma.ui.postMessage({ type: 'source-image', bytes: bytes, targetId: selectedImage.node.id });
+      figma.ui.postMessage({
+        type: 'source-image',
+        bytes: bytes,
+        targetId: selectedImage.node.id,
+        seed: selectedImage.imagePaint.paint.imageHash
+      });
     } catch (error) {
       figma.ui.postMessage({ type: 'error', message: error.message || 'Could not read this image.' });
     }

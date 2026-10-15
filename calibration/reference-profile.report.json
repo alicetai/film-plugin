@@ -1,0 +1,185 @@
+{
+  "size": 33,
+  "holdout_pairs": [
+    "amei-teahouse",
+    "ducks"
+  ],
+  "unmatched_digital": [
+    "cynthia-lauren"
+  ],
+  "unmatched_film": [],
+  "accepted": [
+    {
+      "name": "amei-teahouse",
+      "matches": 344,
+      "inliers": 133,
+      "coverage": 0.2232,
+      "pixels": 4500,
+      "holdout": true
+    },
+    {
+      "name": "cien-pagoda",
+      "matches": 1080,
+      "inliers": 619,
+      "coverage": 0.4622,
+      "pixels": 4500,
+      "holdout": false
+    },
+    {
+      "name": "ducks",
+      "matches": 132,
+      "inliers": 38,
+      "coverage": 0.895,
+      "pixels": 4500,
+      "holdout": true
+    },
+    {
+      "name": "flower-dome",
+      "matches": 109,
+      "inliers": 83,
+      "coverage": 0.1063,
+      "pixels": 4500,
+      "holdout": false
+    },
+    {
+      "name": "hanoi",
+      "matches": 496,
+      "inliers": 182,
+      "coverage": 0.653,
+      "pixels": 4500,
+      "holdout": false
+    },
+    {
+      "name": "jiufen",
+      "matches": 334,
+      "inliers": 124,
+      "coverage": 0.352,
+      "pixels": 4500,
+      "holdout": false
+    },
+    {
+      "name": "merlion",
+      "matches": 144,
+      "inliers": 45,
+      "coverage": 0.4567,
+      "pixels": 4145,
+      "holdout": false
+    },
+    {
+      "name": "treasure-hill",
+      "matches": 241,
+      "inliers": 72,
+      "coverage": 0.7352,
+      "pixels": 4500,
+      "holdout": false
+    }
+  ],
+  "skipped": [],
+  "identity_baseline": {
+    "mean_absolute_rgb_error": 0.17431358993053436,
+    "mean_delta_e76": 26.122600555419922,
+    "p95_delta_e76": 66.53279113769531,
+    "sample_count": 9000
+  },
+  "model_candidates": [
+    {
+      "degree": 3,
+      "regularization": 0.03,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.16716274792033564,
+      "mean_delta_e76": 23.986549377441406,
+      "p95_delta_e76": 63.645145416259766,
+      "sample_count": 9000
+    },
+    {
+      "degree": 2,
+      "regularization": 0.03,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.1663911884457389,
+      "mean_delta_e76": 24.013545989990234,
+      "p95_delta_e76": 63.21728515625,
+      "sample_count": 9000
+    },
+    {
+      "degree": 3,
+      "regularization": 0.1,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.16656572042333778,
+      "mean_delta_e76": 24.135211944580078,
+      "p95_delta_e76": 63.94508743286133,
+      "sample_count": 9000
+    },
+    {
+      "degree": 2,
+      "regularization": 0.1,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.16678744003702314,
+      "mean_delta_e76": 24.332368850708008,
+      "p95_delta_e76": 63.84984588623047,
+      "sample_count": 9000
+    },
+    {
+      "degree": 3,
+      "regularization": 0.3,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.16682457000989073,
+      "mean_delta_e76": 24.442615509033203,
+      "p95_delta_e76": 64.41613006591797,
+      "sample_count": 9000
+    },
+    {
+      "degree": 2,
+      "regularization": 0.3,
+      "monotonic_blend": 1.0,
+      "mean_absolute_rgb_error": 0.16781407408375848,
+      "mean_delta_e76": 24.664430618286133,
+      "p95_delta_e76": 64.67045593261719,
+      "sample_count": 9000
+    }
+  ],
+  "chosen_model": {
+    "degree": 3,
+    "regularization": 0.03,
+    "monotonic_blend": 1.0,
+    "mean_absolute_rgb_error": 0.16716274792033564,
+    "mean_delta_e76": 23.986549377441406,
+    "p95_delta_e76": 63.645145416259766,
+    "sample_count": 9000
+  },
+  "holdout_metrics": {
+    "mean_absolute_rgb_error": 0.16716274792033564,
+    "mean_delta_e76": 23.986549377441406,
+    "p95_delta_e76": 63.645145416259766,
+    "sample_count": 9000
+  },
+  "holdout_pair_metrics": {
+    "amei-teahouse": {
+      "identity": {
+        "mean_absolute_rgb_error": 0.18608833849430084,
+        "mean_delta_e76": 26.832176208496094,
+        "p95_delta_e76": 63.59497833251953,
+        "sample_count": 4500
+      },
+      "profile": {
+        "mean_absolute_rgb_error": 0.1783219159417794,
+        "mean_delta_e76": 24.136701583862305,
+        "p95_delta_e76": 61.06458282470703,
+        "sample_count": 4500
+      }
+    },
+    "ducks": {
+      "identity": {
+        "mean_absolute_rgb_error": 0.1625388264656067,
+        "mean_delta_e76": 25.413026809692383,
+        "p95_delta_e76": 70.13863372802734,
+        "sample_count": 4500
+      },
+      "profile": {
+        "mean_absolute_rgb_error": 0.15600357989889185,
+        "mean_delta_e76": 23.836395263671875,
+        "p95_delta_e76": 66.3082504272461,
+        "sample_count": 4500
+      }
+    }
+  }
+}
